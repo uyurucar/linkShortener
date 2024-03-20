@@ -2,14 +2,14 @@ package com.ucaru.ShortLink.controller;
 
 import com.ucaru.ShortLink.dao.LinkRepository;
 import com.ucaru.ShortLink.entity.ShortLink;
+import com.ucaru.ShortLink.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,37 +18,37 @@ import java.util.List;
 @Controller
 public class LinkController {
 
-    LinkRepository repo;
+    private LinkService linkService;
 
     @Autowired
-    public LinkController(LinkRepository repo) {
-        this.repo = repo;
+    public LinkController(LinkService linkService) {
+        this.linkService = linkService;
     }
 
     @GetMapping("/")
-    @ResponseBody
-    public String Test()
+    //@ResponseBody
+    public String firstPage(Model theModel)
     {
         ShortLink link = new ShortLink();
-
-        link.setActualLink("http://www.google.com");
-        link.setShortLink("h23T13aBc");
-        repo.save(link);
-        return "hello";
+        theModel.addAttribute("shortLink",link);
+        return "first-page";
     }
 
-    @GetMapping("/test")
+    @PostMapping("/saved")
     @ResponseBody
-    public String Test2()
+    public String savedPage(@ModelAttribute("shortLink") ShortLink link)
     {
-        List<ShortLink> links = repo.findByShortLink("dfgf");
-
-        return String.valueOf(links.size());
+        //todo: create short string generator
+        String tempShortLink = "fS3svCsA";
+        link.setShortLink(tempShortLink);
+        linkService.save(link);
+        return link.getShortLink() + " " + link.getActualLink();
     }
 
     @GetMapping("/{shortLink}")
     public ResponseEntity<Object> goToActualLink(@PathVariable String shortLink) throws URISyntaxException {
-        List<ShortLink> link = repo.findByShortLink(shortLink);
+        
+        List<ShortLink> link = linkService.find(shortLink);
         if(link.size() == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         String tempLink = link.get(0).getActualLink();
         URI actualLink = new URI(tempLink);

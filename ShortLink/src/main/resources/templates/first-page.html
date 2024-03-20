@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shrink!</title>
+</head>
+<style>
+     body
+     {
+     background-color: blue;
+     color: white;
+     }
+     .center_hor
+     {
+     margin: auto;
+     width: %50;
+     border: 3px solid green;
+     padding: 100px;
+     }
+     .center_ver
+     {
+    margin: auto;
+    width: %50;
+    border: 3px black;
+    padding: 5px;
+
+    /* border: 3px solid green; */
+     }
+</style>
+<body>
+<div style="margin: 0 auto; text-align: center; width: %50; border: 3px solid white; padding: 100px;">
+    <img th:src="@{img/logo.png}">
+    <hr>
+    <span>your link:</span>
+    <form th:action="@{/saved}" method="POST" th:object="${shortLink}">
+
+        <input type="text" size="80" th:field="*{actualLink}">
+        <br><br>
+        <input class="center_ver" type="submit" value="SAVE">
+
+    </form>
+
+</div>
+
+</body>
+</html>
