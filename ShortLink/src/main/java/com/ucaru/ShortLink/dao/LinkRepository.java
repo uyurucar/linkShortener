@@ -8,5 +8,5 @@ import java.util.List;
 public interface LinkRepository extends JpaRepository<ShortLink,Integer> {
 
     List<ShortLink> findByShortLink(String shortLink);
-
+    List<ShortLink> findByActualLink(String shortLink);
 }

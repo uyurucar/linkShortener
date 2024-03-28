@@ -3,6 +3,7 @@ package com.ucaru.ShortLink.controller;
 import com.ucaru.ShortLink.dao.LinkRepository;
 import com.ucaru.ShortLink.entity.ShortLink;
 import com.ucaru.ShortLink.service.LinkService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 @Controller
 public class LinkController {
 
+    private String currentUrl;
     private LinkService linkService;
 
     @Autowired
@@ -27,22 +29,20 @@ public class LinkController {
 
     @GetMapping("/")
     //@ResponseBody
-    public String firstPage(Model theModel)
+    public String firstPage(Model theModel, HttpServletRequest request)
     {
+        currentUrl = request.getRequestURL().toString();
         ShortLink link = new ShortLink();
         theModel.addAttribute("shortLink",link);
         return "first-page";
     }
 
     @PostMapping("/saved")
-    @ResponseBody
-    public String savedPage(@ModelAttribute("shortLink") ShortLink link)
+    public String savedPage(@ModelAttribute("shortLink") ShortLink link, Model theModel)
     {
-        //todo: create short string generator
-        String tempShortLink = "fS3svCsA";
-        link.setShortLink(tempShortLink);
-        linkService.save(link);
-        return link.getShortLink() + " " + link.getActualLink();
+        theModel.addAttribute("currentURL",currentUrl);
+        link = linkService.save(link);
+        return "saved-page";
     }
 
     @GetMapping("/{shortLink}")

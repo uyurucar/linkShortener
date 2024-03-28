@@ -31,15 +31,11 @@
 <div style="margin: 0 auto; text-align: center; width: %50; border: 3px solid white; padding: 100px;">
     <img th:src="@{img/logo.png}">
     <hr>
-    <span>your link:</span>
-    <form th:action="@{/saved}" method="POST" th:object="${shortLink}">
-
-        <input type="text" size="80" th:field="*{actualLink}">
-        <br><br>
-        <input class="center_ver" type="submit" value="SAVE">
-
-    </form>
-
+    <span>your link is saved!</span>
+    <hr>
+    <span>your short link: </span><a th:href="@{__${currentURL}____${shortLink.shortLink}__}" th:text="@{__${currentURL}____${shortLink.shortLink}__}"></a>
+    <hr>
+    <span>your original link: </span><a th:href="${shortLink.actualLink}" th:text="${shortLink.actualLink}"></a>
 </div>
 
 </body>
