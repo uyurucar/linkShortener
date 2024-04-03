@@ -22,11 +22,15 @@ public class LinkService {
 
     public ShortLink save(ShortLink link)
     {
+        link = addHtml(link);
+
         List<ShortLink> dbLink = linkRepository.findByActualLink(link.getActualLink());
         //todo: create cache and check it first
         if(dbLink.isEmpty())
         {
-            System.out.println("### db is empty ###");
+            //System.out.println("### db is empty ###");
+
+            //static function from ShortLinkGenerator
             String shortenedLink = generate(link.getActualLink());
             link.setShortLink(shortenedLink);
             linkRepository.save(link);
@@ -39,12 +43,22 @@ public class LinkService {
         return link;
     }
 
-    //i actually want to return single object instead of a list
-    //
     public List<ShortLink> find(String shortLink)
     {
         //todo: create cache
         List<ShortLink> links = linkRepository.findByShortLink(shortLink);
         return links;
+    }
+
+    public ShortLink addHtml(ShortLink shortLink)
+    {
+        String actualLink = shortLink.getActualLink();
+        if(actualLink.contains("http://") || actualLink.contains("https://")) ;
+        else
+        {
+            actualLink = "http://" + actualLink;
+            shortLink.setActualLink(actualLink);
+        }
+        return shortLink;
     }
 }

@@ -33,9 +33,9 @@
     <hr>
     <span>your link is saved!</span>
     <hr>
-    <span>your short link: </span><a th:href="@{__${currentURL}____${shortLink.shortLink}__}" th:text="@{__${currentURL}____${shortLink.shortLink}__}"></a>
+    <span>your short link: </span><a th:href="@{__${currentURL}____${shortLink.shortLink}__}" target="_blank"  th:text="@{__${currentURL}____${shortLink.shortLink}__}"></a>
     <hr>
-    <span>your original link: </span><a th:href="${shortLink.actualLink}" th:text="${shortLink.actualLink}"></a>
+    <span>your original link: </span><a th:href="${shortLink.actualLink}" target="_blank" th:text="${shortLink.actualLink}"></a>
 </div>
 
 </body>
